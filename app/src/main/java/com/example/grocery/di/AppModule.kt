@@ -1,6 +1,10 @@
 package com.example.grocery.di
 
 import com.example.grocery.data.remote.Api
+import com.example.grocery.data.repositories.UserRepositoryImpl
+import com.example.grocery.domain.repositories.UserRepository
+import com.example.grocery.domain.usecases.auth.AuthenticationUseCases
+import com.example.grocery.domain.usecases.auth.Login
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,5 +36,19 @@ object AppModule {
             .client(client)
             .build()
             .create(Api::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(api: Api): UserRepository{
+        return UserRepositoryImpl(api = api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthenticationUseCases(repository: UserRepository): AuthenticationUseCases{
+        return AuthenticationUseCases(
+            login = Login(userRepository = repository)
+        )
     }
 }
