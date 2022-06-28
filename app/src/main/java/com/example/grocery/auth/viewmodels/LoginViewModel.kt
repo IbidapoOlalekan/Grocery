@@ -54,6 +54,15 @@ class LoginViewModel @Inject constructor() : ViewModel() {
                             inputValue = state.value.password,
                             inputType = InputType.PASSWORD
                         )
+                        val inputValid = validity.first
+                        if (!inputValid){
+                            val errorMessage = validity.second
+                            _state.value = state.value.copy(
+                                passwordValid = false,
+                                passwordErrorMessage = errorMessage,
+                                formValid = false
+                            )
+                        }
                     }
                 }
             }

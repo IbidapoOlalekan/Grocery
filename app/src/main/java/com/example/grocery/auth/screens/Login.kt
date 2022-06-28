@@ -16,16 +16,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.grocery.navigation.destinations.Destination
 import com.example.grocery.R
+import com.example.grocery.auth.events.LoginFormEvent
+import com.example.grocery.auth.viewmodels.LoginViewModel
 import com.example.grocery.general.components.CustomInputField
+import com.example.grocery.general.components.PasswordInputField
 
 @Composable
 fun Login(
-navController: NavController
+navController: NavController,
+loginViewModel: LoginViewModel = hiltViewModel()
 ){
+    val loginFormState = loginViewModel.state.value
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,29 +61,50 @@ navController: NavController
         )
         Spacer(modifier = Modifier.height(20.dp))
         CustomInputField(
-            value = "",
-            onValueChange = {},
-            onFocusChange = {},
+            value = loginFormState.email,
+            onValueChange = {newValue ->
+                loginViewModel.createEvent(
+                    LoginFormEvent.EnteredEmail(value = newValue)
+                )
+            },
+            onFocusChange = {
+                    loginViewModel.createEvent(
+                        LoginFormEvent.FocusChange("email")
+                    )
+            },
             modifier = Modifier.fillMaxWidth(),
             headerText = "Email" ,
-            hasError = false,
-            errorMessage = "",
+            hasError = !loginFormState.emailValid,
+            errorMessage = loginFormState.emailErrorMessage,
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next
         )
         Spacer(modifier = Modifier.height(20.dp))
-        CustomInputField(
-            value = "",
-            onValueChange = {},
-            onFocusChange = {},
+        PasswordInputField(
+            value = loginFormState.password,
+            onValueChange = {newValue ->
+                loginViewModel.createEvent(
+                    LoginFormEvent.EnteredPassword(value = newValue)
+                )
+            },
+            onFocusChange = {
+                loginViewModel.createEvent(
+                    LoginFormEvent.FocusChange("password")
+                )
+            },
             modifier = Modifier.fillMaxWidth(),
             headerText = "Password" ,
-            hasError = false,
-            errorMessage = "",
-            keyboardType = KeyboardType.Password,
+            hasError = !loginFormState.passwordValid,
+            errorMessage = loginFormState.passwordErrorMessage,
             imeAction = ImeAction.Done
-
         )
+        Spacer(modifier = Modifier.height(10.dp))
+        TextButton(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.align(Alignment.End)
+        ) {
+
+        }
     }
 }
 
