@@ -23,7 +23,7 @@ navController: NavController
         Text(text = "Login")
 
         TextButton(onClick = {
-            navController.navigate(Destination.SignUpDestination.route4)
+            navController.navigate(Destination.SignUpDestination.route)
         }) {
             Text(text = "Go to register")
         }
