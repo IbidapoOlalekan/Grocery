@@ -2,6 +2,7 @@ package com.example.grocery.auth.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -103,7 +104,21 @@ loginViewModel: LoginViewModel = hiltViewModel()
             onClick = { /*TODO*/ },
             modifier = Modifier.align(Alignment.End)
         ) {
-
+            Text(text = "Forgot Password ?")
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Button(
+            onClick = { },
+            modifier = Modifier.fillMaxWidth()
+        ){
+            Text(text = "Login")
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        TextButton(
+            onClick = { navController.navigate(Destination.SignUpDestination.route) },
+            modifier =  Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "Don't have an account? Sign Up")
         }
     }
 }
