@@ -1,5 +1,8 @@
 package com.example.grocery.di
 
+import android.app.Application
+import androidx.room.Room
+import com.example.grocery.data.local.GroceriesDatabase
 import com.example.grocery.data.remote.Api
 import com.example.grocery.data.repositories.UserRepositoryImpl
 import com.example.grocery.domain.repositories.UserRepository
@@ -50,5 +53,16 @@ object AppModule {
         return AuthenticationUseCases(
             login = Login(userRepository = repository)
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideGroceriesDatabase(app:Application): GroceriesDatabase {
+        return Room.databaseBuilder(
+            app,
+            GroceriesDatabase::class.java,
+            GroceriesDatabase.DATABASE_NAME
+        )
+            .build()
     }
 }
