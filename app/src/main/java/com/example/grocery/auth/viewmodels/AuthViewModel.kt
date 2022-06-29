@@ -76,6 +76,7 @@ class AuthViewModel @Inject constructor(
                     is Resource.Success -> {
                         _state.value = state.value.copy(
                             isLoading = false,
+                            isAuthenticated = true
                         )
                         _eventFlow.emit(
                             AuthEvent.LoginSuccess
