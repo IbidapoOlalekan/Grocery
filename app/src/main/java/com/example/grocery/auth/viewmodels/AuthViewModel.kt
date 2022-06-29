@@ -3,6 +3,7 @@ package com.example.grocery.auth.viewmodels
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.grocery.auth.events.AuthEvent
 import com.example.grocery.auth.state.AuthState
 import com.example.grocery.data.remote.request.LoginRequest
@@ -11,6 +12,7 @@ import com.example.grocery.general.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -41,7 +43,7 @@ class AuthViewModel @Inject constructor(
                     email = event.email,
                     password = event.password
                 )
-                login(request= request)
+                login(request = request)
             }
             else -> {
 
@@ -62,9 +64,9 @@ class AuthViewModel @Inject constructor(
                         _state.value = state.value.copy(
                             isLoading = false,
                             errorOccurred = true,
-                            errorMessage = it.message ?: "An Unexpected Error Occured"
+                            errorMessage = it.message ?: "An Unexpected Error Occurred"
                         )
-                        //Todo(EMIT EVENT)
+                        //Todo(emit event)
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(
@@ -75,6 +77,6 @@ class AuthViewModel @Inject constructor(
                         )
                     }
                 }
-            }
+            }.launchIn(viewModelScope)
     }
 }

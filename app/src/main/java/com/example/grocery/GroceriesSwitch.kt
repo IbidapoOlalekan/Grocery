@@ -13,20 +13,19 @@ import com.example.grocery.auth.viewmodels.AuthViewModel
 
 @Composable
 fun GroceriesSwitch(
-    authViewModel: AuthViewModel  = hiltViewModel()
-){
+    authViewModel: AuthViewModel = hiltViewModel()
+) {
     val isAuthenticated = false
-    
-    if (!isAuthenticated){
+
+    if (!isAuthenticated) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement =  Arrangement.Center
+            verticalArrangement = Arrangement.Center
         ) {
             Text(text = "Welcome")
         }
-    }
-    else {
+    } else {
         AuthenticationWrapper(
             viewModel = authViewModel
         )

@@ -1,6 +1,6 @@
 package com.example.grocery.data.remote.request
 
 data class LoginRequest(
-    val email : String,
+    val email: String,
     val password: String
 )
