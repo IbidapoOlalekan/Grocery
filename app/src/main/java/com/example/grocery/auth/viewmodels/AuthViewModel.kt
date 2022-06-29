@@ -61,12 +61,17 @@ class AuthViewModel @Inject constructor(
                         )
                     }
                     is Resource.Error -> {
+                        val message = it.message ?: "An unexpected error occurred"
                         _state.value = state.value.copy(
                             isLoading = false,
                             errorOccurred = true,
-                            errorMessage = it.message ?: "An Unexpected Error Occurred"
+                            errorMessage = message
                         )
-                        //Todo(emit event)
+                      _eventFlow.emit(
+                          AuthEvent.LoginFailure(
+                              message = message
+                          )
+                      )
                     }
                     is Resource.Success -> {
                         _state.value = state.value.copy(
