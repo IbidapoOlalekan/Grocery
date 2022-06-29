@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.room.Room
 import com.example.grocery.data.local.GroceriesDatabase
 import com.example.grocery.data.remote.Api
+import com.example.grocery.data.repositories.GroceryRepositoryImpl
 import com.example.grocery.data.repositories.UserRepositoryImpl
+import com.example.grocery.domain.repositories.GroceryRepository
 import com.example.grocery.domain.repositories.UserRepository
 import com.example.grocery.domain.usecases.auth.AuthenticationUseCases
 import com.example.grocery.domain.usecases.auth.Login
@@ -64,5 +66,11 @@ object AppModule {
             GroceriesDatabase.DATABASE_NAME
         )
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesGroceriesRepository(db: GroceriesDatabase) : GroceryRepository{
+        return  GroceryRepositoryImpl(groceryDao = db.groceryDao)
     }
 }
