@@ -41,6 +41,7 @@ class AuthViewModel @Inject constructor(
                     email = event.email,
                     password = event.password
                 )
+                login(request= request)
             }
             else -> {
 

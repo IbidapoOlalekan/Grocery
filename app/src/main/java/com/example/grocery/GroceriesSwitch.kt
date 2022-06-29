@@ -7,12 +7,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.grocery.auth.AuthenticationWrapper
+import com.example.grocery.auth.viewmodels.AuthViewModel
 
 @Composable
-fun GroceriesSwith(){
-    val isAuthnricated = false
+fun GroceriesSwitch(
+    authViewModel: AuthViewModel  = hiltViewModel()
+){
+    val isAuthenticated = false
     
-    if (!isAuthnricated){
+    if (!isAuthenticated){
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -21,13 +26,9 @@ fun GroceriesSwith(){
             Text(text = "Welcome")
         }
     }
-    else{
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(text = "Not authenticated")
-        }
+    else {
+        AuthenticationWrapper(
+            viewModel = authViewModel
+        )
     }
 }

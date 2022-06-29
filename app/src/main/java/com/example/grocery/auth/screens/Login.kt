@@ -1,12 +1,11 @@
 package com.example.grocery.auth.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,17 +21,34 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.grocery.navigation.destinations.Destination
 import com.example.grocery.R
+import com.example.grocery.auth.events.AuthEvent
 import com.example.grocery.auth.events.LoginFormEvent
+import com.example.grocery.auth.viewmodels.AuthViewModel
 import com.example.grocery.auth.viewmodels.LoginViewModel
 import com.example.grocery.general.components.CustomInputField
 import com.example.grocery.general.components.PasswordInputField
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun Login(
-navController: NavController,
-loginViewModel: LoginViewModel = hiltViewModel()
+    navController: NavController,
+    loginViewModel: LoginViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel
 ){
     val loginFormState = loginViewModel.state.value
+    val isLoading = authViewModel.state.value.isLoading
+    LaunchedEffect(Unit){
+        authViewModel.eventFlow.collectLatest {
+            event -> when(event){
+                is AuthEvent.LoginSuccess ->{
+                    Log.i("login","logged in successfully")
+                }
+            else->{
+
+            }
+            }
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -108,10 +124,26 @@ loginViewModel: LoginViewModel = hiltViewModel()
         }
         Spacer(modifier = Modifier.height(20.dp))
         Button(
-            onClick = { },
+            onClick = {
+                  authViewModel.createEvent(
+                      AuthEvent.Login(
+                          email = loginFormState.email,
+                          password = loginFormState.password
+                      )
+                  )
+            },
             modifier = Modifier.fillMaxWidth()
         ){
-            Text(text = "Login")
+            if(isLoading) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    strokeWidth = 2.dp
+                )
+            }
+                else{
+                    Text(text = "Login")
+                }
+
         }
         Spacer(modifier = Modifier.height(20.dp))
         TextButton(
@@ -122,9 +154,9 @@ loginViewModel: LoginViewModel = hiltViewModel()
         }
     }
 }
-
-@Preview
-@Composable
-fun PreviewLogin(){
-    Login(navController = rememberNavController())
-}
+//
+//@Preview
+//@Composable
+//fun PreviewLogin(){
+//    Login(navController = rememberNavController())
+//}
